@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand */
+  --color-primary: #6c63ff;
+  --color-primary-hover: #5952d9;
+
+  /* Backgrounds */
+  --color-background: #f5f6fa;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #f0f1f5;
+
+  /* Text */
+  --color-text-primary: #24252a;
+  --color-text-secondary: #747680;
+  --color-text-muted: #a3a5ad;
+
+  /* Borders */
+  --color-border: #e2e3e8;
+
+  /* Feedback / actions */
+  --color-danger: #e05252;
+  --color-danger-hover: #c94343;
+
+  /* Misc */
+  --color-white: #ffffff;
+
+  --font-family: 'Inter', sans-serif;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: var(--font-weight-bold);
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+button, .nav__link {
+  font-weight: var(--font-weight-semibold);
+  font-size: 1rem;
+}
+
+p {
+  font-weight: var(--font-weight-regular);
+}
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  .page__title {
+
+  }
+
+  .page__form-container {
+    padding: 1rem;
+    border-radius: 15px;
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1132px) {
+  .wrapper {
+    padding: 0 1rem;
+  }
+}

@@ -1,0 +1,28 @@
+.nav {
+    display: flex;
+    gap: 2rem;
+
+    .nav__link {
+        position: relative;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        color: var(--color-text-primary);
+        transition: all 0.3s ease;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-primary);
+            transition: width 0.3s ease;
+        }
+
+        &:hover::after {
+            width: calc(100% - 2rem);
+        }
+    }
+}

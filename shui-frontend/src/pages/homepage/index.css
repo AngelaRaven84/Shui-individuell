@@ -1,0 +1,21 @@
+.homepage {
+
+    .homepage__top {
+        padding: 2rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .homepage {
+        .homepage__top {
+            flex-direction: column;
+            gap: 1rem;
+            .button {
+                align-self: stretch;
+            }
+        }
+    }
+}
