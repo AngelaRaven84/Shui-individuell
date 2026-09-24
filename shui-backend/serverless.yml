@@ -28,11 +28,18 @@ provider:
             - Fn::Sub: '${ShuiTable.Arn}/index/GSI1'
 
 functions:
-  health:
-    handler: functions/health/index.handler
+  getMessages:
+    handler: functions/getMessages/index.handler
     events:
       - httpApi:
-          path: /health
+          path: /messages
+          method: GET
+
+  getMessage:
+    handler: functions/getMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
           method: GET
 
 resources:
