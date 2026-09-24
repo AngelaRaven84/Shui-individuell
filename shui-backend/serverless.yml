@@ -49,6 +49,13 @@ functions:
           path: /users/{username}/messages
           method: GET
 
+  register:
+    handler: functions/register/index.handler
+    events:
+      - httpApi:
+          path: /auth/register
+          method: POST
+
 resources:
   Resources:
     ShuiTable:
