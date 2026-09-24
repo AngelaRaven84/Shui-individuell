@@ -42,6 +42,13 @@ functions:
           path: /users/{userId}/messages/{id}
           method: GET
 
+  getUserMessages:
+    handler: functions/getUserMessages/index.handler
+    events:
+      - httpApi:
+          path: /users/{username}/messages
+          method: GET
+
 resources:
   Resources:
     ShuiTable:
