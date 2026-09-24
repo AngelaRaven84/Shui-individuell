@@ -35,6 +35,13 @@ functions:
           path: /health
           method: GET
 
+  getMessages:
+    handler: functions/getMessages/index.handler
+    events:
+      - httpApi:
+          path: /messages
+          method: GET
+
 resources:
   Resources:
     ShuiTable:
