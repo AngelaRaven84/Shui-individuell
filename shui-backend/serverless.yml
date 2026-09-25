@@ -1,4 +1,5 @@
 service: shui-api
+useDotenv: true
 
 provider:
   name: aws
@@ -8,6 +9,7 @@ provider:
   environment:
     TABLE_NAME:
       Ref: ShuiTable
+    JWT_SECRET: ${env:JWT_SECRET}
 
   iam:
     role:
@@ -54,6 +56,13 @@ functions:
     events:
       - httpApi:
           path: /auth/register
+          method: POST
+
+  login:
+    handler: functions/login/index.handler
+    events:
+      - httpApi:
+          path: /auth/login
           method: POST
 
 resources:
