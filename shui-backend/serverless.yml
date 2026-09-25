@@ -79,6 +79,13 @@ functions:
           path: /users/{userId}/messages/{id}
           method: PATCH
 
+  deleteMessage:
+    handler: functions/deleteMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: DELETE
+
 resources:
   Resources:
     ShuiTable:
