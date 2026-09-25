@@ -72,6 +72,13 @@ functions:
           path: /messages
           method: POST
 
+  updateMessage:
+    handler: functions/updateMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: PATCH
+
 resources:
   Resources:
     ShuiTable:
