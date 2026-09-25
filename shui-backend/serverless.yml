@@ -65,6 +65,13 @@ functions:
           path: /auth/login
           method: POST
 
+  createMessage:
+    handler: functions/createMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages
+          method: POST
+
 resources:
   Resources:
     ShuiTable:
