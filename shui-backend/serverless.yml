@@ -65,6 +65,27 @@ functions:
           path: /auth/login
           method: POST
 
+  createMessage:
+    handler: functions/createMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages
+          method: POST
+
+  updateMessage:
+    handler: functions/updateMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: PATCH
+
+  deleteMessage:
+    handler: functions/deleteMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: DELETE
+
 resources:
   Resources:
     ShuiTable:
