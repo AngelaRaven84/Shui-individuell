@@ -29,3 +29,17 @@ export const createMessage = async (text, token) => {
 
 	return data;
 };
+
+export const getMessage = async (userId, id) => {
+	const response = await fetch(
+		`${API_URL}/users/${encodeURIComponent(userId)}/messages/${encodeURIComponent(id)}`,
+	);
+
+	const data = await response.json();
+
+	if (!response.ok) {
+		throw new Error(data.message ?? 'Kunde inte hämta meddelandet.');
+	}
+
+	return data;
+};
