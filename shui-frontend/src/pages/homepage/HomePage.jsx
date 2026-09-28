@@ -2,14 +2,47 @@ import './index.css';
 import Header from '../../components/header/Header';
 import Button from '../../components/button/Button';
 import MessageFlow from '../../components/messageflow/MessageFlow';
-import { messages } from '../../data/messages';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/authContext';
+import { getMessages } from '../../api/messages';
 
 const HomePage = () => {
 	const navigate = useNavigate();
 	const { token } = useContext(AuthContext);
+
+	const [messages, setMessages] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
+
+	useEffect(() => {
+		let active = true;
+
+		const loadMessages = async () => {
+			try {
+				const data = await getMessages();
+
+				if (active) {
+					setMessages(data);
+				}
+			} catch (error) {
+				if (active) {
+					setError(error.message);
+				}
+			} finally {
+				if (active) {
+					setLoading(false);
+				}
+			}
+		};
+
+		loadMessages();
+
+		return () => {
+			active = false;
+		};
+	}, []);
+
 	return (
 		<section className='page homepage'>
 			<Header />
@@ -24,7 +57,9 @@ const HomePage = () => {
 						/>
 					)}
 				</section>
-				<MessageFlow messages={messages} />
+				{loading && <p role='status'>Hämtar meddelanden...</p>}
+				{error && <p role='alert'>{error}</p>}
+				{!loading && !error && <MessageFlow messages={messages} />}
 			</div>
 		</section>
 	);
