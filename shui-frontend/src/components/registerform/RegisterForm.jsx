@@ -74,7 +74,7 @@ const RegisterForm = () => {
 					onChange={(event) => setConfirmPassword(event.target.value)}
 				/>
 			</label>
-			<Button text='Registrera' type='default' />
+			<Button text='Registrera' type='default' htmlType='submit' />
 			<p role='status'>{message}</p>
 			<p className='register-form__message'>
 				Har du redan ett konto?{' '}

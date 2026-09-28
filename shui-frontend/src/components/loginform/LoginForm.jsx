@@ -47,7 +47,7 @@ const LoginForm = () => {
 					onChange={(event) => setPassword(event.target.value)}
 				/>
 			</label>
-			<Button text='Logga in' type='default' />
+			<Button text='Logga in' type='default' htmlType='submit' />
 			<p role='status'>{message}</p>
 			<p className='login-form__message'>
 				Har du inget konto?{' '}
