@@ -1,9 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthContext } from './authContext';
 import { jwtDecode } from 'jwt-decode';
 
 const AuthProvider = ({ children }) => {
 	const [token, setToken] = useState(null);
+
+	useEffect(() => {
+		if (!token) return;
+
+		let remainingTime = 0;
+
+		try {
+			const { exp } = jwtDecode(token);
+
+			if (typeof exp === 'number' && Number.isFinite(exp)) {
+				remainingTime = Math.max(0, exp * 1000 - Date.now());
+			}
+		} catch {
+			remainingTime = 0;
+		}
+
+		const timeoutId = setTimeout(() => {
+			setToken(null);
+		}, remainingTime);
+
+		return () => clearTimeout(timeoutId);
+	}, [token]);
 
 	let userId = null;
 
