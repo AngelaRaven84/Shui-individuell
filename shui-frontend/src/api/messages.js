@@ -43,3 +43,25 @@ export const getMessage = async (userId, id) => {
 
 	return data;
 };
+
+export const updateMessage = async (userId, id, text, token) => {
+	const response = await fetch(
+		`${API_URL}/users/${encodeURIComponent(userId)}/messages/${encodeURIComponent(id)}`,
+		{
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ text }),
+		},
+	);
+
+	const data = await response.json();
+
+	if (!response.ok) {
+		throw new Error(data.message ?? 'Kunde inte uppdatera meddelandet.');
+	}
+
+	return data;
+};
