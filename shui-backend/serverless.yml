@@ -11,6 +11,20 @@ provider:
       Ref: ShuiTable
     JWT_SECRET: ${env:JWT_SECRET}
 
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PATCH
+        - DELETE
+        - OPTIONS
+
   iam:
     role:
       statements:
