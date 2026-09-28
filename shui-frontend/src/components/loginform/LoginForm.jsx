@@ -1,10 +1,13 @@
 import './index.css';
 import Button from '../button/Button';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../context/authContext';
 
 const LoginForm = () => {
+	const navigate = useNavigate();
+	const { setToken } = useContext(AuthContext);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [message, setMessage] = useState('');
@@ -14,8 +17,9 @@ const LoginForm = () => {
 		setMessage('Loggar in...');
 
 		try {
-			await login(email, password);
-			setMessage('Inloggningen lyckades!');
+			const data = await login(email, password);
+			setToken(data.token);
+			navigate('/');
 		} catch (error) {
 			setMessage(error.message);
 		}
