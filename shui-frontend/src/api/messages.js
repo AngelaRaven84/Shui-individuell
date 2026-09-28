@@ -65,3 +65,23 @@ export const updateMessage = async (userId, id, text, token) => {
 
 	return data;
 };
+
+export const deleteMessage = async (userId, id, token) => {
+	const response = await fetch(
+		`${API_URL}/users/${encodeURIComponent(userId)}/messages/${encodeURIComponent(id)}`,
+		{
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		},
+	);
+
+	const data = await response.json();
+
+	if (!response.ok) {
+		throw new Error(data.message ?? 'Kunde inte radera meddelandet.');
+	}
+
+	return data;
+};

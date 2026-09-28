@@ -5,7 +5,7 @@ import MessageFlow from '../../components/messageflow/MessageFlow';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/authContext';
-import { getMessages } from '../../api/messages';
+import { getMessages, deleteMessage } from '../../api/messages';
 
 const HomePage = () => {
 	const navigate = useNavigate();
@@ -43,6 +43,16 @@ const HomePage = () => {
 		};
 	}, []);
 
+	const handleDelete = async (userId, id) => {
+		await deleteMessage(userId, id, token);
+
+		setMessages((currentMessages) =>
+			currentMessages.filter(
+				(message) => !(message.userId === userId && message.id === id),
+			),
+		);
+	};
+
 	return (
 		<section className='page homepage'>
 			<Header />
@@ -59,7 +69,9 @@ const HomePage = () => {
 				</section>
 				{loading && <p role='status'>Hämtar meddelanden...</p>}
 				{error && <p role='alert'>{error}</p>}
-				{!loading && !error && <MessageFlow messages={messages} />}
+				{!loading && !error && (
+					<MessageFlow messages={messages} onDelete={handleDelete} />
+				)}
 			</div>
 		</section>
 	);
