@@ -49,7 +49,7 @@ const Message = ({ message, onDelete }) => {
 							className='icon icon--pencil'
 							size={20}
 							weight='bold'
-							onClick={() => navigate(`/message/edit/${message.id}`)}
+							aria-hidden='true'
 						/>
 					</Link>
 					<button
