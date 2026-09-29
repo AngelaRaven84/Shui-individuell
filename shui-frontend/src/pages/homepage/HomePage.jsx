@@ -2,13 +2,19 @@ import './index.css';
 import Header from '../../components/header/Header';
 import Button from '../../components/button/Button';
 import MessageFlow from '../../components/messageflow/MessageFlow';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/authContext';
-import { getMessages, deleteMessage } from '../../api/messages';
+import {
+	getMessages,
+	deleteMessage,
+	getUserMessages,
+} from '../../api/messages';
 
 const HomePage = () => {
 	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	const selectedUsername = searchParams.get('username') ?? '';
 	const { token } = useContext(AuthContext);
 
 	const [messages, setMessages] = useState([]);
@@ -20,7 +26,12 @@ const HomePage = () => {
 
 		const loadMessages = async () => {
 			try {
-				const data = await getMessages();
+				setLoading(true);
+				setError('');
+
+				const data = selectedUsername
+					? await getUserMessages(selectedUsername)
+					: await getMessages();
 
 				if (active) {
 					setMessages(data);
@@ -41,7 +52,7 @@ const HomePage = () => {
 		return () => {
 			active = false;
 		};
-	}, []);
+	}, [selectedUsername]);
 
 	const handleDelete = async (userId, id) => {
 		await deleteMessage(userId, id, token);
@@ -58,7 +69,11 @@ const HomePage = () => {
 			<Header />
 			<div className='wrapper'>
 				<section className='homepage__top'>
-					<h2 className='homepage__title'>Alla meddelanden</h2>
+					<h2 className='homepage__title'>
+						{selectedUsername
+							? `Meddelanden från ${selectedUsername}`
+							: 'Alla meddelanden'}
+					</h2>
 					{token && (
 						<Button
 							text='Nytt meddelande'
@@ -67,11 +82,28 @@ const HomePage = () => {
 						/>
 					)}
 				</section>
+				{selectedUsername && (
+					<div className='homepage__filter'>
+						<Button
+							text='Visa alla meddelanden'
+							type='default'
+							onClick={() => navigate('/')}
+						/>
+					</div>
+				)}
 				{loading && <p role='status'>Hämtar meddelanden...</p>}
 				{error && <p role='alert'>{error}</p>}
-				{!loading && !error && (
-					<MessageFlow messages={messages} onDelete={handleDelete} />
-				)}
+				{!loading &&
+					!error &&
+					(messages.length === 0 ? (
+						<p role='status'>
+							{selectedUsername
+								? `Inga meddelanden från ${selectedUsername}.`
+								: 'Det finns inga meddelanden ännu.'}
+						</p>
+					) : (
+						<MessageFlow messages={messages} onDelete={handleDelete} />
+					))}
 			</div>
 		</section>
 	);
