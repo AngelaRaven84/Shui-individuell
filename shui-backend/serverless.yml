@@ -15,6 +15,7 @@ provider:
     cors:
       allowedOrigins:
         - http://localhost:5173
+        - https://d19ccgqansmqjt.cloudfront.net
       allowedHeaders:
         - Content-Type
         - Authorization
