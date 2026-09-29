@@ -1,4 +1,5 @@
 service: shui-api
+useDotenv: true
 
 provider:
   name: aws
@@ -8,6 +9,22 @@ provider:
   environment:
     TABLE_NAME:
       Ref: ShuiTable
+    JWT_SECRET: ${env:JWT_SECRET}
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+        - https://d19ccgqansmqjt.cloudfront.net
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PATCH
+        - DELETE
+        - OPTIONS
 
   iam:
     role:
@@ -28,12 +45,61 @@ provider:
             - Fn::Sub: '${ShuiTable.Arn}/index/GSI1'
 
 functions:
-  health:
-    handler: functions/health/index.handler
+  getMessages:
+    handler: functions/getMessages/index.handler
     events:
       - httpApi:
-          path: /health
+          path: /messages
           method: GET
+
+  getMessage:
+    handler: functions/getMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: GET
+
+  getUserMessages:
+    handler: functions/getUserMessages/index.handler
+    events:
+      - httpApi:
+          path: /users/{username}/messages
+          method: GET
+
+  register:
+    handler: functions/register/index.handler
+    events:
+      - httpApi:
+          path: /auth/register
+          method: POST
+
+  login:
+    handler: functions/login/index.handler
+    events:
+      - httpApi:
+          path: /auth/login
+          method: POST
+
+  createMessage:
+    handler: functions/createMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages
+          method: POST
+
+  updateMessage:
+    handler: functions/updateMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: PATCH
+
+  deleteMessage:
+    handler: functions/deleteMessage/index.handler
+    events:
+      - httpApi:
+          path: /users/{userId}/messages/{id}
+          method: DELETE
 
 resources:
   Resources:
