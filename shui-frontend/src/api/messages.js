@@ -85,3 +85,18 @@ export const deleteMessage = async (userId, id, token) => {
 
 	return data;
 };
+
+export const getUserMessages = async (username) => {
+	const response = await fetch(
+		`${API_URL}/users/${encodeURIComponent(username)}/messages`,
+	);
+	const data = await response.json();
+
+	if (!response.ok) {
+		throw new Error(
+			data.message ?? 'Kunde inte hämta användarens meddelanden.',
+		);
+	}
+
+	return data;
+};

@@ -34,7 +34,11 @@ const Message = ({ message, onDelete }) => {
 			</h3>
 			<div className='message__content'>
 				<div className='message__content-top'>
-					<h4 className='message__user'>{username}</h4>
+					<h4 className='message__user'>
+						<Link to={`/?username=${encodeURIComponent(username)}`}>
+							{username}
+						</Link>
+					</h4>
 					<p className='message__date'>{formatDate(createdAt)}</p>
 				</div>
 				<p className='message__text'>{message.text}</p>
