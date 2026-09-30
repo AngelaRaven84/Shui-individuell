@@ -5,19 +5,28 @@ import { sendResponse } from '../../responses/index.mjs';
 import { errorHandler } from '../../middlewares/errorHandler/index.mjs';
 
 export const getMessages = async () => {
-	const result = await db.send(
-		new QueryCommand({
-			TableName: process.env.TABLE_NAME,
-			IndexName: 'GSI1',
-			KeyConditionExpression: 'GSI1PK = :pk',
-			ExpressionAttributeValues: {
-				':pk': 'MESSAGES',
-			},
-			ScanIndexForward: false,
-		}),
-	);
+	const messages = [];
+	let lastEvaluatedKey;
 
-	return sendResponse(200, result.Items ?? []);
+	do {
+		const result = await db.send(
+			new QueryCommand({
+				TableName: process.env.TABLE_NAME,
+				IndexName: 'GSI1',
+				KeyConditionExpression: 'GSI1PK = :pk',
+				ExpressionAttributeValues: {
+					':pk': 'MESSAGES',
+				},
+				ScanIndexForward: false,
+				ExclusiveStartKey: lastEvaluatedKey,
+			}),
+		);
+
+		messages.push(...(result.Items ?? []));
+		lastEvaluatedKey = result.LastEvaluatedKey;
+	} while (lastEvaluatedKey);
+
+	return sendResponse(200, messages);
 };
 
 export const handler = middy(getMessages).use(errorHandler());
