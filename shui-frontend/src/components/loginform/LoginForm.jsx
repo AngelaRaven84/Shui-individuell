@@ -30,7 +30,9 @@ const LoginForm = () => {
 			<label className='login-form__label'>
 				E-post
 				<input
-					type='text'
+					type='email'
+					name='email'
+					autoComplete='username'
 					className='login-form__input'
 					placeholder='namn@exempel.se'
 					value={email}
@@ -41,6 +43,8 @@ const LoginForm = () => {
 				Lösenord
 				<input
 					type='password'
+					name='password'
+					autoComplete='current-password'
 					className='login-form__input'
 					placeholder='********'
 					value={password}
