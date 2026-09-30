@@ -26,18 +26,27 @@ const getUserMessages = async (event) => {
 		return sendResponse(200, []);
 	}
 
-	const result = await db.send(
-		new QueryCommand({
-			TableName: process.env.TABLE_NAME,
-			KeyConditionExpression: 'PK = :pk AND begins_with(SK, :prefix)',
-			ExpressionAttributeValues: {
-				':pk': `USER#${userLookup.Item.userId}`,
-				':prefix': 'MESSAGE#',
-			},
-		}),
-	);
+	const messages = [];
+	let lastEvaluatedKey;
 
-	return sendResponse(200, result.Items ?? []);
+	do {
+		const result = await db.send(
+			new QueryCommand({
+				TableName: process.env.TABLE_NAME,
+				KeyConditionExpression: 'PK = :pk AND begins_with(SK, :prefix)',
+				ExpressionAttributeValues: {
+					':pk': `USER#${userLookup.Item.userId}`,
+					':prefix': 'MESSAGE#',
+				},
+				ExclusiveStartKey: lastEvaluatedKey,
+			}),
+		);
+
+		messages.push(...(result.Items ?? []));
+		lastEvaluatedKey = result.LastEvaluatedKey;
+	} while (lastEvaluatedKey);
+
+	return sendResponse(200, messages);
 };
 
 export const handler = middy(getUserMessages).use(errorHandler());
